@@ -203,7 +203,7 @@ plane <- function(xmin=-0.001, xmax=1.05, ymin=-0.001, ymax=1.05, xlab="", ylab=
   ishows <- if (!is.null(show)) index(show, names(state)) else c(x, y)
   nvar <- length(state)
   if (zero) state[1:nvar] <- rep(0,nvar)
-  lvec <- 25                         # length of vector
+  lvec <- 15                         # length of vector
   logx <- ifelse(grepl('x',log), TRUE, FALSE)
   logy <- ifelse(grepl('y',log), TRUE, FALSE)
   xc <- plane_coord(logx,xmin,xmax,npixels)
@@ -242,7 +242,13 @@ plane <- function(xmin=-0.001, xmax=1.05, ymin=-0.001, ymax=1.05, xlab="", ylab=
     dx <- if (logx) (log10(xmax)-log10(xmin))/grid else (xmax-xmin)/grid
     dy <- if (logy) (log10(ymax)-log10(ymin))/grid else (ymax-ymin)/grid
     
-    shaft_in <- min(pin) / lvec * vectorlen * 1.3
+    # Physical (isotropic) shaft length tied to the GRID-CELL size, not the
+    # panel size, so vectors stay a constant fraction of a cell -- robust to
+    # par(mfrow) and to any `grid` (previously min(pin)/lvec ignored `grid`,
+    # so arrows shrank relative to the field in multi-panel or coarse-grid
+    # layouts). 0.5 => an arrow spans about half the distance to its neighbour.
+    cell_in  <- min(pin) / grid              # size of one grid cell, in inches
+    shaft_in <- cell_in * 0.3 * vectorlen
     vx <- if (logx) 1 + 3.32*grid*dx/lvec else shaft_in * (xmax-xmin)/pin[1]
     vy <- if (logy) 1 + 3.32*grid*dy/lvec else shaft_in * (ymax-ymin)/pin[2]
     

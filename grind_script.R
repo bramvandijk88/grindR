@@ -91,7 +91,10 @@ plane <- function(xmin=-0.001, xmax=1.05, ymin=-0.001, ymax=1.05, xlab="", ylab=
     dx <- if (logx) (log10(xmax)-log10(xmin))/grid else (xmax-xmin)/grid
     dy <- if (logy) (log10(ymax)-log10(ymin))/grid else (ymax-ymin)/grid
     
-    shaft_in <- min(pin) / lvec * vectorlen * 1.0
+    # Shaft length tied to the grid-cell size (not the panel), so vectors keep
+    # a constant fraction of a cell under par(mfrow) and any `grid`.
+    cell_in  <- min(pin) / grid              # size of one grid cell, in inches
+    shaft_in <- cell_in * 0.5 * vectorlen
     vx <- if (logx) 1 + 3.32*grid*dx/lvec else shaft_in * (xmax-xmin)/pin[1]
     vy <- if (logy) 1 + 3.32*grid*dy/lvec else shaft_in * (ymax-ymin)/pin[2]
     

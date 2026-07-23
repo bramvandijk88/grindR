@@ -1,7 +1,7 @@
 Package: grindR
 Type: Package
 Title: Phase Plane Analysis and Parameter Estimation for ODE Models
-Version: 0.1.0
+Version: 0.1.1
 Date: 2026-07-23
 Authors@R: c(
     person("Rob J.", "de Boer",
@@ -15,7 +15,7 @@ Description: A wrapper around deSolve, rootSolve, and FME that provides
     five easy-to-use functions for analyzing ODE models: run() for numerical
     integration, plane() for phase plane analysis, newton() for finding steady
     states, continue() for bifurcation diagrams, and fit() for parameter
-    estimation. Designed for use in biology courses at Utrecht University.
+    estimation.
 License: GPL (>= 2)
 URL: https://tbb.bio.uu.nl/rdb/grind.html
 Encoding: UTF-8

@@ -6,7 +6,7 @@
 \alias{grindR-package}
 \title{grindR: Phase plane analysis and parameter estimation for ODE models}
 \description{
-A wrapper around deSolve, rootSolve, and FME that provides five easy-to-use functions for analyzing ODE models: run() for numerical integration, plane() for phase plane analysis, newton() for finding steady states, continue() for bifurcation diagrams, and fit() for parameter estimation. Designed for use in biology courses at Utrecht University.
+A wrapper around deSolve, rootSolve, and FME that provides five easy-to-use functions for analyzing ODE models: run() for numerical integration, plane() for phase plane analysis, newton() for finding steady states, continue() for bifurcation diagrams, and fit() for parameter estimation.
 }
 \seealso{
 Useful links:

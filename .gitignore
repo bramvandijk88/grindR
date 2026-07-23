@@ -10,3 +10,5 @@
 # build artifacts
 *.tar.gz
 *.Rcheck/
+release.sh
+.positai
