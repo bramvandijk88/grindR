@@ -31,7 +31,7 @@ plane(
   col = "black",
   pch = 20,
   vectorlen = 1,
-  arrowsize = 0.05,
+  arrowsize = 0.3,
   ...
 )
 }
@@ -93,7 +93,8 @@ trajectories, and plotting character of their starting points.}
 
 \item{vectorlen}{Scaling factor for the length of the vectors.}
 
-\item{arrowsize}{Size of the arrowheads.}
+\item{arrowsize}{Arrowhead length as a fraction of the vector's shaft
+(so heads scale with the arrows); clamped to a visible range.}
 
 \item{...}{Additional arguments passed on to \code{run} (for the phase
 portrait) or to \code{plot}.}

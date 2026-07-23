@@ -153,7 +153,8 @@ plane_coord <- function(Log, Min, Max, npixels) {
 #' @param lwd,col,pch Line width of the nullclines, colour of the phase-portrait
 #'   trajectories, and plotting character of their starting points.
 #' @param vectorlen Scaling factor for the length of the vectors.
-#' @param arrowsize Size of the arrowheads.
+#' @param arrowsize Arrowhead length as a fraction of the vector's shaft
+#'   (so heads scale with the arrows); clamped to a visible range.
 #' @param ... Additional arguments passed on to \code{run} (for the phase
 #'   portrait) or to \code{plot}.
 #'
@@ -177,7 +178,7 @@ plane_coord <- function(Log, Min, Max, npixels) {
 #' @seealso \code{\link{run}}, \code{\link{newton}}, \code{\link{continue}}
 #'
 #' @export
-plane <- function(xmin=-0.001, xmax=1.05, ymin=-0.001, ymax=1.05, xlab="", ylab="", log="", npixels=500, state=s, parms=p, odes=model, x=1, y=2, time=0, grid=5, show=NULL, addone=FALSE, portrait=FALSE, vector=0, add=FALSE, legend=TRUE, zero=TRUE, lwd=2, col="black", pch=20, vectorlen=1, arrowsize=0.05, ...) {
+plane <- function(xmin=-0.001, xmax=1.05, ymin=-0.001, ymax=1.05, xlab="", ylab="", log="", npixels=500, state=s, parms=p, odes=model, x=1, y=2, time=0, grid=5, show=NULL, addone=FALSE, portrait=FALSE, vector=0, add=FALSE, legend=TRUE, zero=TRUE, lwd=2, col="black", pch=20, vectorlen=1, arrowsize=0.3, ...) {
   # Make a phase plane with nullclines and/or phase portrait
   dots <- list(...)
   if (!is.null(dots)) {
@@ -237,18 +238,19 @@ plane <- function(xmin=-0.001, xmax=1.05, ymin=-0.001, ymax=1.05, xlab="", ylab=
   if (portrait | vector) {
     
     pin <- par("pin") # get the dimension of the plot in R in inches
-    ahead <- (max(0.02, min(arrowsize * min(pin) / 2, 0.15))*0.7)
-    
+
     dx <- if (logx) (log10(xmax)-log10(xmin))/grid else (xmax-xmin)/grid
     dy <- if (logy) (log10(ymax)-log10(ymin))/grid else (ymax-ymin)/grid
-    
-    # Physical (isotropic) shaft length tied to the GRID-CELL size, not the
-    # panel size, so vectors stay a constant fraction of a cell -- robust to
-    # par(mfrow) and to any `grid` (previously min(pin)/lvec ignored `grid`,
-    # so arrows shrank relative to the field in multi-panel or coarse-grid
-    # layouts). 0.5 => an arrow spans about half the distance to its neighbour.
-    cell_in  <- min(pin) / grid              # size of one grid cell, in inches
-    shaft_in <- cell_in * 0.3 * vectorlen
+
+    # Isotropic shaft length in inches. It tracks the grid-cell size
+    # (min(pin) * 0.5/grid) so vectors stay proportional to the field under
+    # par(mfrow) and coarse grids, but is floored at min(pin)/lvec so they do
+    # not shrink to nothing at fine grids. Both terms scale with the panel, so
+    # the result is robust to the plotting layout.
+    shaft_in <- min(pin) * max(0.5/lvec, 0.4/grid) * vectorlen
+    # Arrowhead length scales with the shaft (arrowsize = head-to-shaft ratio),
+    # clamped so heads stay visible but never dwarf the arrow.
+    ahead    <- max(0.02, min(0.15, 0.8*shaft_in * arrowsize))
     vx <- if (logx) 1 + 3.32*grid*dx/lvec else shaft_in * (xmax-xmin)/pin[1]
     vy <- if (logy) 1 + 3.32*grid*dy/lvec else shaft_in * (ymax-ymin)/pin[2]
     
@@ -286,8 +288,8 @@ plane <- function(xmin=-0.001, xmax=1.05, ymin=-0.001, ymax=1.05, xlab="", ylab=
             # Single arrow in true (dx, dy) direction, normalised length
             mag <- sqrt(dvx^2 + dvy^2)
             if (mag > 0) {
-              norm_dx <- dvx / mag
-              norm_dy <- dvy / mag
+              norm_dx <- 1.4*dvx / mag
+              norm_dy <- 1.4*dvy / mag
             } else {
               norm_dx <- 0
               norm_dy <- 0
@@ -297,7 +299,7 @@ plane <- function(xmin=-0.001, xmax=1.05, ymin=-0.001, ymax=1.05, xlab="", ylab=
             arrows(
               x0 = state[x], y0 = state[y],
               x1 = x1, y1 = y1,
-              lwd = 1.2, length = arrowsize
+              lwd = 1.2, length = ahead
             )
 
           } else {
