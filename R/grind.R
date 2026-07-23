@@ -247,7 +247,7 @@ plane <- function(xmin=-0.001, xmax=1.05, ymin=-0.001, ymax=1.05, xlab="", ylab=
     # par(mfrow) and coarse grids, but is floored at min(pin)/lvec so they do
     # not shrink to nothing at fine grids. Both terms scale with the panel, so
     # the result is robust to the plotting layout.
-    shaft_in <- min(pin) * max(0.5/lvec, 0.4/grid) * vectorlen
+    shaft_in <- min(pin) * max(0.4/lvec, 0.3/grid) * vectorlen
     # Arrowhead length scales with the shaft (arrowsize = head-to-shaft ratio),
     # clamped so heads stay visible but never dwarf the arrow.
     ahead    <- max(0.02, min(0.15, 0.8*shaft_in * arrowsize))
@@ -299,7 +299,7 @@ plane <- function(xmin=-0.001, xmax=1.05, ymin=-0.001, ymax=1.05, xlab="", ylab=
             arrows(
               x0 = state[x], y0 = state[y],
               x1 = x1, y1 = y1,
-              lwd = 1.2, length = ahead
+              lwd = 1.2, length = ahead*1.4
             )
 
           } else {

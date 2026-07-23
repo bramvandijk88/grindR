@@ -1,7 +1,7 @@
 Package: grindR
 Type: Package
 Title: Phase Plane Analysis and Parameter Estimation for ODE Models
-Version: 0.1.2
+Version: 0.1.3
 Date: 2026-07-23
 Authors@R: c(
     person("Rob J.", "de Boer",
