@@ -1,0 +1,7 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.positai$
+^\.claude$
+^grind_script\.R$
+^test_script\.R$
+^grindR-manual\.pdf$
